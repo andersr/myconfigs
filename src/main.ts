@@ -32,7 +32,6 @@ const getActions = async function () {
 (async () => {
   try {
     const actions = await getActions();
-    console.log("actions: ", actions);
 
     if (!actions) {
       throw new Error("No actions found");

@@ -1,8 +1,11 @@
 {
-  "name": "@anders-co/my-configs",
+  "name": "@andersr/myconfigs",
   "version": "1.0.0",
   "description": "",
   "main": "dist/main.js",
+  "bin": {
+    "mygen": "bin/cli.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc:watch": "tsc -w",

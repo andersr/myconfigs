@@ -3,7 +3,7 @@ import shell from "shelljs";
 import { ActionConfig, CommandAction } from "../models";
 
 export function actionRunner(action: ActionConfig): void {
-  console.log(`*** Running ${action.name} ****`);
+  console.log(`Running action: ${action.name}`);
 
   for (let i = 0; i < action.steps.length; i++) {
     const type = action.steps[i].type;
@@ -14,7 +14,8 @@ export function actionRunner(action: ActionConfig): void {
           console.error("No command found");
           break;
         }
-        shell.exec(step.command);
+        console.log(`Running command: ${step.command}`);
+        // shell.exec(step.command);
         break;
       case "copyFile":
         console.log("copyFile: ");
@@ -25,4 +26,6 @@ export function actionRunner(action: ActionConfig): void {
         break;
     }
   }
+
+  console.log(`Action "${action.name}" completed.`);
 }
