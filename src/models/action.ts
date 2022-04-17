@@ -10,6 +10,7 @@ export interface CopyFileAction {
 }
 
 export interface ActionConfig {
+  dirName: string;
   name: string;
   steps: (CommandAction | CopyFileAction)[];
 }
