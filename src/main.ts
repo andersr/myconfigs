@@ -1,29 +1,40 @@
-import fs from "fs";
+import fs from "fs-extra";
 import prompts from "prompts";
 import { ActionConfig } from "./models";
 import { actionRunner } from "./runners/actionRunner";
 
-const getActions = async function () {
+const getActions = async (): Promise<{
+  actions: ActionConfig[];
+  actionsPath: string;
+}> => {
   const homedir = require("os").homedir();
+  const actionsPath = homedir + "/.myconfigs/actions";
 
   try {
-    const folders = fs.readdirSync(homedir + "/.myconfigs/actions");
+    const folders = fs.readdirSync(actionsPath);
 
     const actions: ActionConfig[] = await Promise.all(
-      folders.map(async (folder) => {
-        const path = `${homedir}/.myconfigs/actions/${folder}/config`;
+      folders.map(async (dirName) => {
+        const path = `${homedir}/.myconfigs/actions/${dirName}/config`;
         const config = await import(path);
 
         return {
-          id: folder,
+          dirName,
           ...config,
         };
       })
     );
 
-    return actions;
+    return {
+      actions,
+      actionsPath,
+    };
   } catch (error) {
     console.log("error: ", error);
+    return {
+      actions: [],
+      actionsPath: "",
+    };
   }
 };
 
@@ -31,18 +42,19 @@ const getActions = async function () {
 
 (async () => {
   try {
-    const actions = await getActions();
+    const { actions, actionsPath } = await getActions();
 
-    if (!actions) {
+    if (actions.length === 0) {
       throw new Error("No actions found");
     }
 
-    const choices = actions?.map((action, index) => ({
+    const choices = actions?.map((action: ActionConfig, index: number) => ({
       title: action.name,
       //   description: "This option has a description",
       index,
     }));
 
+    // TODO: is this needed?
     const onCancel = () => {
       console.log("Action cancelled.");
       return true;
@@ -61,7 +73,7 @@ const getActions = async function () {
     );
 
     if (response?.index) {
-      actionRunner(actions[response.index]);
+      actionRunner(actions[response.index], actionsPath);
     }
 
     // need to invoke this inside the target repo
