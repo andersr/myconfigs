@@ -73,7 +73,9 @@ const getActions = async (): Promise<{
     );
 
     if (response?.index) {
-      actionRunner(actions[response.index], actionsPath);
+      await actionRunner(actions[response.index], actionsPath);
+      // TODO: do not display message if action is cancelled
+      console.log(`Action "${actions[response.index].name}" completed.`);
     }
 
     // need to invoke this inside the target repo
