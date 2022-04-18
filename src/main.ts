@@ -3,6 +3,7 @@ import prompts from "prompts";
 import { ActionConfig } from "./models";
 import { actionRunner } from "./runners/actionRunner";
 
+// TODO: move these into separate files
 const getActions = async (): Promise<{
   actions: ActionConfig[];
   actionsPath: string;
@@ -73,9 +74,17 @@ const getActions = async (): Promise<{
     );
 
     if (response?.index) {
-      await actionRunner(actions[response.index], actionsPath);
-      // TODO: do not display message if action is cancelled
-      console.log(`Action "${actions[response.index].name}" completed.`);
+      // if inputValues.length > 0 get all values and store
+      // change steps to outputs
+      const success = await actionRunner(actions[response.index], actionsPath);
+
+      if (success) {
+        console.log(`Action "${actions[response.index].name}" completed.`);
+      } else {
+        console.log(
+          `Unable to complete the action "${actions[response.index].name}"`
+        );
+      }
     }
 
     // need to invoke this inside the target repo

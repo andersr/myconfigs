@@ -1,23 +1,36 @@
 import fs from "fs-extra";
 import shell from "shelljs";
+import { getInputValues, handleNewFromTemplate } from "../lib";
 
 import {
   ActionConfig,
+  AppendToFileAction,
   CommandAction,
   CopyFileAction,
+  KeyValuePairs,
   NewFromTemplateAction,
 } from "../models";
 import { copyFile, inputPrompt, convertHandlebars, readFile } from "../utils";
 
-export async function actionRunner(action: ActionConfig, actionPath: string) {
+export async function actionRunner(
+  action: ActionConfig,
+  actionPath: string
+): Promise<boolean> {
   console.log(`Running action: ${action.name}`);
+  let inputs: KeyValuePairs = {};
+
   const actionDir = actionPath + "/" + action.dirName;
-  for (let i = 0; i < action.steps.length; i++) {
-    const type = action.steps[i].type;
+
+  if (action.inputs.length > 0) {
+    inputs = await getInputValues(action.inputs);
+  }
+  // TOO: move to outputFiles
+  for (let i = 0; i < action.outputs.length; i++) {
+    const type = action.outputs[i].type;
     let step;
     switch (type) {
       case "command":
-        step = action.steps[i] as CommandAction;
+        step = action.outputs[i] as CommandAction;
         if (!step || !step.command) {
           console.error("No command found");
           break;
@@ -26,7 +39,7 @@ export async function actionRunner(action: ActionConfig, actionPath: string) {
         shell.exec(step.command);
         break;
       case "copyFile":
-        step = action.steps[i] as CopyFileAction;
+        step = action.outputs[i] as CopyFileAction;
         if (!step.source || !step.target) {
           console.error("Missing file paths: cannot add file.");
           break;
@@ -34,29 +47,20 @@ export async function actionRunner(action: ActionConfig, actionPath: string) {
         copyFile(actionDir + step.source, process.cwd() + step.target);
         break;
       case "newFromTemplate":
-        step = action.steps[i] as NewFromTemplateAction;
-        const response = await inputPrompt(step.promptMessage);
-        if (!response) {
-          console.error("no input response ");
-          return;
-        }
-
-        const fileContent = readFile(actionDir + step.source);
-
-        const file = convertHandlebars(fileContent, {
-          name: response,
+        await handleNewFromTemplate({
+          action: action.outputs[i] as NewFromTemplateAction,
+          actionDir,
+          inputs,
         });
-
-        const path = convertHandlebars(process.cwd() + step.target, {
-          name: response,
-        });
-
-        // TODO: wrap in try/catch, add console message with path to where file was added
-        await fs.outputFile(path, file);
         break;
+      case "append":
+        step = action.outputs[i] as AppendToFileAction;
+      // get templateFile, generate output, get targetFile, append output to targetFile
       default:
         console.log(`Unknown step type: ${type}`);
         break;
     }
   }
+
+  return new Promise((resolve) => resolve(true));
 }
