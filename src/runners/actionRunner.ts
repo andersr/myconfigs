@@ -35,30 +35,21 @@ export async function actionRunner(action: ActionConfig, actionPath: string) {
         break;
       case "newFromTemplate":
         step = action.steps[i] as NewFromTemplateAction;
-        // if (!step.source || !step.target) {
-        //   console.error("Missing file paths: cannot add file.");
-        //   break;
-        // }
-        // copyFile(actionDir + step.source, process.cwd() + step.target);
         const response = await inputPrompt(step.promptMessage);
-        // console.log("response: ", response);
         if (!response) {
           console.error("no input response ");
           return;
         }
-        // TODO: use reponse value as input for template
+
         const fileContent = readFile(actionDir + step.source);
 
         const file = convertHandlebars(fileContent, {
           name: response,
         });
 
-        // TODO: convert path
-
         const path = convertHandlebars(process.cwd() + step.target, {
           name: response,
         });
-        // console.log("path: ", path);
 
         // TODO: wrap in try/catch, add console message with path to where file was added
         await fs.outputFile(path, file);

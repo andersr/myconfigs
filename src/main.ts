@@ -68,17 +68,13 @@ const getActions = async (): Promise<{
           message: "Please select an action to run",
           choices,
         },
-        {
-          type: (prev) => (prev == "newFromTemplate" ? "text" : null),
-          name: "name",
-          message: "Component name?",
-        },
       ],
       { onCancel }
     );
 
     if (response?.index) {
       await actionRunner(actions[response.index], actionsPath);
+      // TODO: do not display message if action is cancelled
       console.log(`Action "${actions[response.index].name}" completed.`);
     }
 
