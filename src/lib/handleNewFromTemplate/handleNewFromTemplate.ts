@@ -6,19 +6,30 @@ interface NewFromTemplateArgs {
   action: NewFromTemplateAction;
   actionDir: string;
   inputs: KeyValuePairs;
+  isAppend?: boolean;
 }
 
 export const handleNewFromTemplate = async ({
   action,
   actionDir,
   inputs,
+  isAppend,
 }: NewFromTemplateArgs) => {
   try {
     const file = convertHandlebars(readFile(actionDir + action.source), inputs);
-    const path = convertHandlebars(action.target, inputs);
-
-    await fs.outputFile(process.cwd() + path, file);
-    console.log(`Added file: ${path}`);
+    const localPath = convertHandlebars(action.target, inputs);
+    const fullPath = process.cwd() + localPath;
+    if (isAppend) {
+      const exists = fs.existsSync(fullPath);
+      await fs.ensureFile(fullPath);
+      await fs.writeFile(fullPath, `${exists ? "\n" : ""}${file}`, {
+        flag: "a",
+      });
+      console.log(`Appended to: ${localPath}`);
+      return;
+    }
+    await fs.outputFile(fullPath, file);
+    console.log(`Added file: ${localPath}`);
   } catch (error) {
     console.error(error);
   }

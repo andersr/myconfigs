@@ -54,8 +54,13 @@ export async function actionRunner(
         });
         break;
       case "append":
-        step = action.outputs[i] as AppendToFileAction;
-      // get templateFile, generate output, get targetFile, append output to targetFile
+        await handleNewFromTemplate({
+          action: action.outputs[i] as NewFromTemplateAction,
+          actionDir,
+          inputs,
+          isAppend: true,
+        });
+        break;
       default:
         console.log(`Unknown step type: ${type}`);
         break;
