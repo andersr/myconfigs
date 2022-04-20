@@ -11,6 +11,7 @@
     "tsc:watch": "tsc -w",
     "dist:clear": "rimraf dist/*",
     "dev": "run-s dist:clear tsc:watch",
+    "dev:test": "jest --watch",
     "start": "node ./dist/main.js",
     "prepare": "husky install"
   },
