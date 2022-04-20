@@ -6,6 +6,6 @@ export const copyFile = (sourcePath: string, targetPath: string) => {
     fs.copySync(sourcePath, targetPath);
     console.log("Add file: ", targetPath);
   } catch (error) {
-    console.error("copySync error: ", error);
+    console.error(error);
   }
 };

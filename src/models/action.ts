@@ -8,7 +8,6 @@ export interface CopyFileAction {
   source: string;
   target: string;
 }
-
 export interface NewFromTemplateAction {
   type: "newFromTemplate";
   // promptMessage: string;

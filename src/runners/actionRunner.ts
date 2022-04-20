@@ -1,16 +1,14 @@
-import fs from "fs-extra";
 import shell from "shelljs";
 import { getInputValues, handleNewFromTemplate } from "../lib";
 
 import {
   ActionConfig,
-  AppendToFileAction,
   CommandAction,
   CopyFileAction,
   KeyValuePairs,
   NewFromTemplateAction,
 } from "../models";
-import { copyFile, inputPrompt, convertHandlebars, readFile } from "../utils";
+import { copyFile } from "../utils";
 
 export async function actionRunner(
   action: ActionConfig,
@@ -21,11 +19,12 @@ export async function actionRunner(
 
   const actionDir = actionPath + "/" + action.dirName;
 
-  if (action.inputs.length > 0) {
+  if (action?.inputs?.length > 0) {
     inputs = await getInputValues(action.inputs);
   }
+  console.log("action: ", action);
   // TOO: move to outputFiles
-  for (let i = 0; i < action.outputs.length; i++) {
+  for (let i = 0; i < action.outputs?.length; i++) {
     const type = action.outputs[i].type;
     let step;
     switch (type) {
