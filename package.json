@@ -7,27 +7,35 @@
     "mygen": "bin/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "tsc:watch": "tsc -w",
     "dist:clear": "rimraf dist/*",
     "dev": "run-s dist:clear tsc:watch",
-    "start": "node ./dist/main.js"
+    "dev:test": "jest --watch",
+    "start": "node ./dist/main.js",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^17.0.24",
+    "@types/jest": "^27.4.1",
+    "@types/lodash.camelcase": "^4.3.6",
+    "@types/node": "^17.0.25",
     "@types/prompts": "^2.0.14",
     "@types/shelljs": "^0.8.11",
+    "jest": "^27.5.1",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   },
   "dependencies": {
     "fs-extra": "^10.1.0",
     "handlebars": "^4.7.7",
+    "lodash.camelcase": "^4.3.0",
     "prompts": "^2.4.2",
     "shelljs": "^0.8.5"
   }

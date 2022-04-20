@@ -8,16 +8,31 @@ export interface CopyFileAction {
   source: string;
   target: string;
 }
-
 export interface NewFromTemplateAction {
   type: "newFromTemplate";
-  promptMessage: string;
+  // promptMessage: string;
   source: string;
   target: string;
+}
+export interface AppendToFileAction {
+  type: "append";
+  source: string;
+  target: string;
+}
+
+export interface ActionInput {
+  key: string;
+  message: string;
 }
 
 export interface ActionConfig {
   dirName: string;
   name: string;
-  steps: (CommandAction | CopyFileAction | NewFromTemplateAction)[];
+  inputs: ActionInput[];
+  outputs: (
+    | CommandAction
+    | CopyFileAction
+    | NewFromTemplateAction
+    | AppendToFileAction
+  )[];
 }

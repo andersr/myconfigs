@@ -1,6 +1,8 @@
 import Handlebars from "handlebars";
+import camelCase from "lodash.camelCase";
+import { KeyValuePairs } from "../../models";
 
-type KVPairs = { [key: string]: string };
+// type KVPairs = { [key: string]: string };
 
 // TODO: add tests for all these
 // TODO: rename to be about template not a file necessarily
@@ -11,7 +13,11 @@ Handlebars.registerHelper("pascalCase", function (str: string) {
     .join("");
 });
 
-export const convertHandlebars = (content: string, params: KVPairs) => {
+Handlebars.registerHelper("camelCase", function (str: string) {
+  return camelCase(str);
+});
+
+export const convertHandlebars = (content: string, params: KeyValuePairs) => {
   // TODO: handle read error, register pascalcase helper
   try {
     const template = Handlebars.compile(content);

@@ -4,14 +4,17 @@ import prompts from "prompts";
 export const inputPrompt = async (
   message: string
 ): Promise<string | undefined> => {
-  const response = await prompts([
-    {
-      type: "text",
-      name: "name",
-      message: message || "Name?",
-      validate: (input: string) => input.trim() !== "",
-    },
-  ]);
-
-  return response.name;
+  try {
+    const response = await prompts([
+      {
+        type: "text",
+        name: "name",
+        message: message || "Name?",
+        validate: (input: string) => input.trim() !== "",
+      },
+    ]);
+    return response.name;
+  } catch (error) {
+    console.error("error: ", error);
+  }
 };
