@@ -73,9 +73,10 @@ const getActions = async (): Promise<{
       { onCancel }
     );
 
-    if (response?.index) {
+    if (typeof response?.index === "number") {
       // if inputValues.length > 0 get all values and store
       // change steps to outputs
+
       const success = await actionRunner(actions[response.index], actionsPath);
 
       if (success) {
