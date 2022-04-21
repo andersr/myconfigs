@@ -2,8 +2,6 @@ import Handlebars from "handlebars";
 import camelCase from "lodash.camelCase";
 import { KeyValuePairs } from "../../models";
 
-// type KVPairs = { [key: string]: string };
-
 // TODO: add tests for all these
 // TODO: rename to be about template not a file necessarily
 Handlebars.registerHelper("pascalCase", function (str: string) {
@@ -15,6 +13,10 @@ Handlebars.registerHelper("pascalCase", function (str: string) {
 
 Handlebars.registerHelper("camelCase", function (str: string) {
   return camelCase(str);
+});
+
+Handlebars.registerHelper("spaceToUnderscore", function (str: string) {
+  return str.replaceAll(" ", "_");
 });
 
 export const convertHandlebars = (content: string, params: KeyValuePairs) => {

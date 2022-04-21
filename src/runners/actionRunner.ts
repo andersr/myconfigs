@@ -1,5 +1,9 @@
 import shell from "shelljs";
-import { getInputValues, handleNewFromTemplate } from "../lib";
+import {
+  getInputValues,
+  handleNewFromTemplate,
+  handleNewGenerator,
+} from "../lib";
 
 import {
   ActionConfig,
@@ -12,12 +16,12 @@ import { copyFile } from "../utils";
 
 export async function actionRunner(
   action: ActionConfig,
-  actionPath: string
+  actionsPath: string
 ): Promise<boolean> {
   console.log(`Running action: ${action.name}`);
   let inputs: KeyValuePairs = {};
 
-  const actionDir = actionPath + "/" + action.dirName;
+  const actionDir = actionsPath + "/" + action.dirName;
 
   if (action?.inputs?.length > 0) {
     inputs = await getInputValues(action.inputs);
@@ -58,6 +62,14 @@ export async function actionRunner(
           actionDir,
           inputs,
           isAppend: true,
+        });
+        break;
+      case "newGenerator":
+        await handleNewGenerator({
+          action: action.outputs[i] as NewFromTemplateAction,
+          actionDir,
+          actionsPath,
+          inputs,
         });
         break;
       default:

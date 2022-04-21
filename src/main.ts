@@ -52,7 +52,7 @@ const getActions = async (): Promise<{
 
     const choices = actions?.map((action: ActionConfig, index: number) => ({
       title: action.name,
-      //   description: "This option has a description",
+      description: action.description,
       index,
     }));
 
