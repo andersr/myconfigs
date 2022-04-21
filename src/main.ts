@@ -22,6 +22,7 @@ const getActions = async (): Promise<{
         return {
           dirName,
           ...config,
+          name: dirName.replaceAll("_", " "),
         };
       })
     );

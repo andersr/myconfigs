@@ -22,7 +22,7 @@ export async function actionRunner(
   if (action?.inputs?.length > 0) {
     inputs = await getInputValues(action.inputs);
   }
-  console.log("action: ", action);
+
   // TOO: move to outputFiles
   for (let i = 0; i < action.outputs?.length; i++) {
     const type = action.outputs[i].type;
