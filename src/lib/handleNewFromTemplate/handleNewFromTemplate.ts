@@ -16,7 +16,10 @@ export const handleNewFromTemplate = async ({
   isAppend,
 }: NewFromTemplateArgs) => {
   try {
-    const file = convertHandlebars(readFile(actionDir + action.source), inputs);
+    const file = convertHandlebars(
+      readFile(actionDir + "/templates/" + action.source),
+      inputs
+    );
     const localPath = convertHandlebars(action.target, inputs);
     const fullPath = process.cwd() + localPath;
     if (isAppend) {
