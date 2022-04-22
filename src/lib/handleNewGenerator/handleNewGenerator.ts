@@ -15,13 +15,25 @@ export const handleNewGenerator = async ({
   actionDir,
   actionsPath,
   inputs,
-  isAppend,
 }: NewFromTemplateArgs) => {
   try {
     const file = convertHandlebars(readFile(actionDir + action.source), inputs);
     const localPath = convertHandlebars(action.target, inputs);
     const fullPath = actionsPath + localPath;
-    await fs.outputFile(fullPath, file);
+    // TODO: add this check to other templates
+    const fileExists = fs.existsSync(fullPath);
+    if (fileExists) {
+      // TODO: prevent this from displaying on cancel
+      console.log(
+        `Sorry, a generator by the name "${inputs["name"]}" already exists. Please try a different name. `
+      );
+      return;
+    }
+    await fs.outputFile(fullPath, file, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
     console.log(`Added file: ${localPath}`);
   } catch (error) {
     console.error(error);
