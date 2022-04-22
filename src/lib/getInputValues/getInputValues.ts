@@ -5,7 +5,7 @@ export async function getInputValues(inputs: ActionInput[]) {
   let responses: KeyValuePairs = {};
 
   for (let i = 0; i < inputs.length; i++) {
-    const response = await inputPrompt(inputs[i].message);
+    const response = await inputPrompt(inputs[i]);
     if (response) {
       responses[inputs[i].key] = response;
     }

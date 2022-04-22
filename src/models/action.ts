@@ -14,6 +14,13 @@ export interface NewFromTemplateAction {
   source: string;
   target: string;
 }
+
+export interface NewGeneratorAction {
+  type: "newGenerator";
+  // promptMessage: string;
+  source: string;
+  target: string;
+}
 export interface AppendToFileAction {
   type: "append";
   source: string;
@@ -23,16 +30,19 @@ export interface AppendToFileAction {
 export interface ActionInput {
   key: string;
   message: string;
+  required?: boolean;
 }
 
 export interface ActionConfig {
   dirName: string;
   name: string;
+  description?: string;
   inputs: ActionInput[];
   outputs: (
     | CommandAction
     | CopyFileAction
     | NewFromTemplateAction
     | AppendToFileAction
+    | NewGeneratorAction
   )[];
 }

@@ -22,6 +22,7 @@ const getActions = async (): Promise<{
         return {
           dirName,
           ...config,
+          name: dirName.replaceAll("_", " "),
         };
       })
     );
@@ -51,7 +52,7 @@ const getActions = async (): Promise<{
 
     const choices = actions?.map((action: ActionConfig, index: number) => ({
       title: action.name,
-      //   description: "This option has a description",
+      description: action.description,
       index,
     }));
 
@@ -78,7 +79,7 @@ const getActions = async (): Promise<{
       // change steps to outputs
 
       const success = await actionRunner(actions[response.index], actionsPath);
-
+      // TODO: this message is displaying on cancel of the action
       if (success) {
         console.log(`Action "${actions[response.index].name}" completed.`);
       } else {
