@@ -1,9 +1,23 @@
 import fs from "fs-extra";
 
-export const appendToFile = (path: string, value: string) => {
+interface AppendFileArgs {
+  fullPath: string;
+  localPath: string;
+  file: string;
+}
+
+export const appendToFile = async ({
+  fullPath,
+  localPath,
+  file,
+}: AppendFileArgs) => {
   try {
-    fs.copySync(path, value);
-    console.log(`Adding "${value}" to end of ${path} `);
+    const exists = fs.existsSync(fullPath);
+    await fs.ensureFile(fullPath);
+    await fs.writeFile(fullPath, `${exists ? "\n" : ""}${file}`, {
+      flag: "a",
+    });
+    console.log(`Appended to: ${localPath}`);
   } catch (error) {
     console.error(error);
   }
