@@ -1,7 +1,6 @@
 import { KeyValuePairs, NewFromTemplateAction } from "../../models";
-import { convertHandlebars, readFile } from "../../utils";
+import { convertHandlebars, fileExists, readFile } from "../../utils";
 import fs from "fs-extra";
-
 interface NewFromTemplateArgs {
   action: NewFromTemplateAction;
   actionDir: string;
@@ -21,15 +20,17 @@ export const handleNewGenerator = async ({
     const localPath = convertHandlebars(action.target, inputs);
     const fullPath = actionsPath + localPath;
     // TODO: add this check to other templates
-    const fileExists = fs.existsSync(fullPath);
-    if (fileExists) {
-      // TODO: prevent this from displaying on cancel
-      console.log(
+    // TODO: prevent this from displaying on cancel
+    if (
+      fileExists(
+        fullPath,
         `Sorry, a generator by the name "${inputs["name"]}" already exists. Please try a different name. `
-      );
+      )
+    ) {
       return;
     }
-    await fs.outputFile(fullPath, file, function (err) {
+
+    fs.outputFile(fullPath, file, function (err) {
       if (err) {
         console.log(err);
       }

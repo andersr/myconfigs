@@ -1,5 +1,10 @@
 import { KeyValuePairs, NewFromTemplateAction } from "../../models";
-import { appendToFile, convertHandlebars, readFile } from "../../utils";
+import {
+  appendToFile,
+  convertHandlebars,
+  fileExists,
+  readFile,
+} from "../../utils";
 import fs from "fs-extra";
 
 interface NewFromTemplateArgs {
@@ -22,6 +27,14 @@ export const handleNewFromTemplate = async ({
     );
     const localPath = convertHandlebars(action.target, inputs);
     const fullPath = process.cwd() + localPath;
+    if (
+      fileExists(
+        fullPath,
+        `Sorry, a file by the name "${inputs["name"]}" already exists. Please try a different name.`
+      )
+    ) {
+      return;
+    }
     if (isAppend) {
       await appendToFile({ fullPath, localPath, file });
       return;
