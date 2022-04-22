@@ -30,6 +30,7 @@ export interface AppendToFileAction {
 export interface ActionInput {
   key: string;
   message: string;
+  required?: boolean;
 }
 
 export interface ActionConfig {
