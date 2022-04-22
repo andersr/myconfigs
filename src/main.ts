@@ -79,7 +79,7 @@ const getActions = async (): Promise<{
       // change steps to outputs
 
       const success = await actionRunner(actions[response.index], actionsPath);
-
+      // TODO: this message is displaying on cancel of the action
       if (success) {
         console.log(`Action "${actions[response.index].name}" completed.`);
       } else {
