@@ -1,4 +1,4 @@
-import { ActionConfig } from "~/models";
+import { ActionConfig } from "../../models";
 import fs from "fs-extra";
 
 export const getActions = async (
