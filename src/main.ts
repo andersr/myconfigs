@@ -2,14 +2,28 @@ import prompts from "prompts";
 import { getActions } from "./lib";
 import { ActionConfig } from "./models";
 import { actionRunner } from "./runners/actionRunner";
+import fs from "fs-extra";
 
-// TODO: set myconfig location globally
+// import AWS from "aws-sdk";
+
+// AWS.config.getCredentials(function (err) {
+//   if (err) throw new Error(err.stack);
+// });
+
+// const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 // TODO: research how to integrate jsdoc
 // TODO: add eslint w order imports
 
 (async () => {
+  const configsPath = process.cwd() + "/.myconfigs";
+  if (!fs.existsSync(configsPath)) {
+    // console.log(`Found .myconfigs directory`);
+    console.log("no configs dir found");
+    return;
+  }
+  const actionsPath = configsPath + "/actions";
   try {
-    const { actions, actionsPath } = await getActions();
+    const { actions } = await getActions(actionsPath);
 
     if (actions.length === 0) {
       throw new Error("No actions found");
@@ -40,9 +54,6 @@ import { actionRunner } from "./runners/actionRunner";
     );
 
     if (typeof response?.index === "number") {
-      // if inputValues.length > 0 get all values and store
-      // change steps to outputs
-
       const success = await actionRunner(actions[response.index], actionsPath);
       // TODO: this message is displaying on cancel of the action
       if (success) {

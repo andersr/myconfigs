@@ -1,20 +1,22 @@
 import { ActionConfig } from "~/models";
 import fs from "fs-extra";
 
-export const getActions = async (): Promise<{
+export const getActions = async (
+  path: string
+): Promise<{
   actions: ActionConfig[];
-  actionsPath: string;
+  //   actionsPath: string;
 }> => {
-  const homedir = require("os").homedir();
-  const actionsPath = homedir + "/.myconfigs/actions";
+  //   const homedir = require("os").homedir();
+  //   const actionsPath = homedir + "/.myconfigs/actions";
 
   try {
-    const folders = fs.readdirSync(actionsPath);
+    const folders = fs.readdirSync(path);
 
     const actions: ActionConfig[] = await Promise.all(
       folders.map(async (dirName) => {
-        const path = `.myconfigs/actions/${dirName}/config`; // ${homedir}/
-        const config = await import(path);
+        // const configPath = `${path}/${dirName}/config`; // ${homedir}/
+        const config = await import(`${path}/${dirName}/config`);
 
         return {
           dirName,
@@ -26,13 +28,13 @@ export const getActions = async (): Promise<{
 
     return {
       actions,
-      actionsPath,
+      //   actionsPath,
     };
   } catch (error) {
     console.log("error: ", error);
     return {
       actions: [],
-      actionsPath: "",
+      //   actionsPath: "",
     };
   }
 };
