@@ -1,7 +1,7 @@
 import { KeyValuePairs, NewFromTemplateAction } from "../../models";
 import { convertHandlebars, fileExists, readFile } from "../../utils";
 import fs from "fs-extra";
-interface NewFromTemplateArgs {
+interface Args {
   action: NewFromTemplateAction;
   actionDir: string;
   actionsPath: string;
@@ -14,8 +14,9 @@ export const handleNewGenerator = async ({
   actionDir,
   actionsPath,
   inputs,
-}: NewFromTemplateArgs) => {
+}: Args) => {
   try {
+    // ask for output files - what directory should this file be in?
     const file = convertHandlebars(readFile(actionDir + action.source), inputs);
     const localPath = convertHandlebars(action.target, inputs);
     const fullPath = actionsPath + localPath;

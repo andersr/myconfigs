@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
 import camelCase from "lodash.camelCase";
-import { KeyValuePairs } from "../../models";
+import { KeyValuePairs } from "~/models";
 
 // TODO: add tests for all these
 // TODO: rename to be about template not a file necessarily
