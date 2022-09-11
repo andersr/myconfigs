@@ -3,6 +3,7 @@ import { ActionConfig } from "../../models";
 import { actionRunner } from "../../runners/actionRunner";
 import { getActions } from "../getActions/getActions";
 
+// TODO validate generator files - is there a corresponding file for each source?  Does the target directory exist? - if invalid, report reason(s) and exclude from list
 export const showActionsMenu = async (configsPath: string) => {
   const actionsPath = configsPath + "/actions";
   try {
